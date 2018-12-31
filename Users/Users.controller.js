@@ -37,7 +37,7 @@ module.exports = {
     })
   },
 
-  NewUser(db, req, res){
+  NewUser(bcrypt, db, req, res){
     if (req.body.username) {
       db.query('SELECT * FROM users WHERE username = ?', [req.body.username], (err, result) => {
         if (err) {
@@ -46,24 +46,26 @@ module.exports = {
           if (result[0] != undefined) {
             res.json('Pseudo déjà pris')
           } else {
-            db.query(`
-              INSERT INTO users(id, username, password, id_discord, admin)
-              VALUES(NULL, "${req.body.username}", "${req.body.password}", "${req.body.id_discord}", 0)`,
-              (err, result) => {
-              if (err) {
-                res.json(err.message)
-              } else {
-                db.query('SELECT * FROM users WHERE username = ?', [req.body.username], (err, result) => {
-                  if (err) {
-                    res.json(err.message)
-                  } else {
-                    res.json({
-                      id: result[0].id,
-                      username: result[0].username
-                    })
-                  }
-                })
-              }
+            bcrypt.hash(req.body.password, 10, (err, hash) => {
+              db.query(`
+                INSERT INTO users(id, username, password, id_discord, admin)
+                VALUES(NULL, "${req.body.username}", "${hash}", "${req.body.id_discord}", 0)`,
+                (err, result) => {
+                if (err) {
+                  res.json(err.message)
+                } else {
+                  db.query('SELECT * FROM users WHERE username = ?', [req.body.username], (err, result) => {
+                    if (err) {
+                      res.json(err.message)
+                    } else {
+                      res.json({
+                        id: result[0].id,
+                        username: result[0].username
+                      })
+                    }
+                  })
+                }
+              })
             })
           }
         }
