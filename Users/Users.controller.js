@@ -47,8 +47,8 @@ module.exports = {
             res.json('Pseudo déjà pris')
           } else {
             db.query(`
-              INSERT INTO users(id, username, password, id_discord)
-              VALUES(NULL, "${req.body.username}", "${req.body.password}", "${req.body.id_discord}")`,
+              INSERT INTO users(id, username, password, id_discord, admin)
+              VALUES(NULL, "${req.body.username}", "${req.body.password}", "${req.body.id_discord}", 0)`,
               (err, result) => {
               if (err) {
                 res.json(err.message)
