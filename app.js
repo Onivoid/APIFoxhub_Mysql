@@ -6,7 +6,6 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const express = require('express');
 const morgan = require('morgan');
-const config = require('./config');
 const app = express();
 
 const UsersRouter = require('./Users/Users.controller.js');
@@ -32,11 +31,11 @@ db.connect((err) => {
         res.send('LOL');
       });
 
-      app.get('/users', (req, res) => UsersRouter.GetAll(db, req, res));
-      app.get('/user', (req, res) => UsersRouter.GetOne(db, req, res));
-      app.post('/user', (req, res) => UsersRouter.NewUser(db, req, res));
-      app.put('/user', (req, res) => UsersRouter.UpdateUser(db, req, res));
-      app.delete('/user', (req, res) => UsersRouter.RemoveUser(db, req, res));
+      app.get('/users', (req, res) => UsersRouter.GetAll(db, req, res)); // Récupérer tout les utilisateurs
+      app.get('/user', (req, res) => UsersRouter.GetOne(db, req, res)); // Récupérer un utilisateur
+      app.post('/user', (req, res) => UsersRouter.NewUser(db, req, res)); // Créer un utilisateur
+      app.put('/user', (req, res) => UsersRouter.UpdateUser(db, req, res)); // Modifier le Mot de Passe
+      app.delete('/user', (req, res) => UsersRouter.RemoveUser(db, req, res)); // Supprimer un Utilisateur
 
     }
 

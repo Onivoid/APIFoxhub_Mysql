@@ -5,7 +5,15 @@ module.exports = {
       if (err) {
         res.json(error(err.message))
       } else {
-        res.json(result)
+        let members = [];
+        result.forEach(n => {
+          members.push({
+            id: n.id,
+            username: n.username,
+            id_discord: n.id_discord
+          });
+        });
+        res.json(members);
       }
     })
   },
@@ -36,11 +44,11 @@ module.exports = {
           res.json(err.message)
         } else {
           if (result[0] != undefined) {
-            res.json('Pseudo déjà pris' )
+            res.json('Pseudo déjà pris')
           } else {
             db.query(`
-              INSERT INTO users(id, username, password, email)
-              VALUES(NULL, "${req.body.username}", "${req.body.password}", "${req.body.email}")`,
+              INSERT INTO users(id, username, password, id_discord)
+              VALUES(NULL, "${req.body.username}", "${req.body.password}", "${req.body.id_discord}")`,
               (err, result) => {
               if (err) {
                 res.json(err.message)
