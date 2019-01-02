@@ -9,8 +9,7 @@ module.exports = {
         result.forEach(n => {
           members.push({
             id: n.id,
-            username: n.username,
-            id_discord: n.id_discord
+            username: n.username
           });
         });
         res.json(members);
@@ -48,8 +47,8 @@ module.exports = {
           } else {
             bcrypt.hash(req.body.password, 10, (err, hash) => {
               db.query(`
-                INSERT INTO users(id, username, password, id_discord, admin)
-                VALUES(NULL, "${req.body.username}", "${hash}", "${req.body.id_discord}", 0)`,
+                INSERT INTO users(id, username, password, admin)
+                VALUES(NULL, "${req.body.username}", "${hash}", 0)`,
                 (err, result) => {
                 if (err) {
                   res.json(err.message)
